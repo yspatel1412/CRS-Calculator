@@ -1,0 +1,164 @@
+:root {
+    --primary-green: #2e7d32; /* Deep, professional green */
+    --secondary-green: #388e3c; /* Slightly lighter green */
+    --light-green: #e8f5e9; /* Very light green for backgrounds */
+    --dark-green: #1b5e20; /* Dark green for accents */
+    --text-dark: #333; /* Dark text for readability */
+    --text-light: #f5f5f5; /* Light text for dark backgrounds */
+    --primary-dark: #1b5e20;   /* Dark green for hover states */
+    --primary-light: #e8f5e9;  /* Light green background */
+  }
+  
+  body {
+      background-color: var(--light-green);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text-dark);
+  }
+  
+  /* Navbar styling */
+  .navbar {
+      background-color: var(--primary-green) !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .navbar-brand, .nav-link {
+      color: var(--text-light) !important;
+  }
+  
+  .nav-link:hover {
+      color: rgba(255, 255, 255, 0.8) !important;
+  }
+  
+  /* Card styling */
+  .card {
+      border: none;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      background-color: white;
+  }
+  
+  .card-header {
+      background-color: var(--primary-green);
+      color: var(--text-light);
+      border-radius: 8px 8px 0 0 !important;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+  }
+  
+  /* Buttons */
+  .btn-primary {
+      background-color: var(--primary-green);
+      border-color: var(--primary-green);
+      color: white;
+  }
+  
+  .btn-primary:hover {
+      background-color: var(--dark-green);
+      border-color: var(--dark-green);
+  }
+  
+  /* Form elements */
+  .form-control, .form-select {
+      border-radius: 6px;
+      padding: 10px;
+      border: 1px solid #ddd;
+  }
+  
+  .form-control:focus, .form-select:focus {
+      border-color: var(--secondary-green);
+      box-shadow: 0 0 0 0.2rem rgba(46, 125, 50, 0.25);
+  }
+  
+  /* Tables and lists */
+  .table th {
+      background-color: #f1f8f1;
+      color: var(--dark-green);
+  }
+  
+  .list-group-item {
+      padding: 0.75rem 1.25rem;
+      border-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Progress bars */
+  .progress {
+      border-radius: 10px;
+      background-color: #e0e0e0;
+  }
+  
+  .progress-bar {
+      background-color: var(--secondary-green);
+      font-weight: 500;
+  }
+  
+  /* Footer */
+  footer {
+      background-color: var(--primary-green);
+      color: var(--text-light);
+      padding: 1.5rem 0;
+      margin-top: 2rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+      .col-form-label {
+          text-align: left !important;
+          margin-bottom: 5px;
+      }
+      
+      .card {
+          border-radius: 0;
+          box-shadow: none;
+          margin-bottom: 15px;
+      }
+  }
+  
+  /* Utility classes */
+  .text-green {
+      color: var(--primary-green);
+  }
+  
+  .bg-light-green {
+      background-color: var(--light-green);
+  }
+  :root {
+    --primary-color: #2e7d32;  /* Professional green (replaces blue) */
+    --primary-dark: #1b5e20;   /* Dark green for hover states */
+    --primary-light: #e8f5e9;  /* Light green background */
+  }
+  
+  /* Change ALL blue elements to green */
+  .navbar.bg-primary,
+  .card-header.bg-primary,
+  .btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+  }
+  
+  /* Hover states */
+  .btn-primary:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+  }
+  
+  /* Focus states */
+  .form-control:focus, 
+  .form-select:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(46, 125, 50, 0.25) !important;
+  }
+  
+  /* Text colors for contrast */
+  .navbar.bg-primary .navbar-brand,
+  .navbar.bg-primary .nav-link,
+  .card-header.bg-primary,
+  .card-header.bg-primary h5 {
+    color: white !important;
+  }
+  
+  /* Table headers */
+  .table th {
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+  }

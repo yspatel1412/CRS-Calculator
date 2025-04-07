@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <!-- Added pt-5 (padding-top) to create space below fixed navbar -->
+        <div class="card mb-4 pt-5 mt-4">
+            <div class="card-header bg-success text-white">
+                <h3 class="text-center">Your CRS Score: {{ results.total_score }}</h3>
+            </div>
+            <div class="card-body">
+                <!-- Progress bar -->
+                <div class="progress mb-4" style="height: 30px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" 
+                         role="progressbar" 
+                         style="width: {{ '%.2f'|format((results.total_score / 1200) * 100) }}%" 
+                         aria-valuenow="{{ results.total_score }}" 
+                         aria-valuemin="0" 
+                         aria-valuemax="1200">
+                        {{ results.total_score }} points
+                    </div>
+                </div>
+                
+                <!-- Score Breakdown -->
+                <h4 class="mb-3">Score Breakdown</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Category</th>
+                                <th>Points</th>
+                                <th>Max Possible</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Core Human Capital (Age + Education + Language + Work)</td>
+                                <td>{{ results.breakdown.core_total }}</td>
+                                <td>
+                                    {% if results.form_data.status == 'single' %}
+                                        866
+                                    {% else %}
+                                        798
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if results.form_data.status == 'single' %}
+                                        {{ "%.1f"|format((results.breakdown.core_total / 866) * 100) }}%
+                                    {% else %}
+                                        {{ "%.1f"|format((results.breakdown.core_total / 798) * 100) }}%
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Spouse/Partner Factors</td>
+                                <td>{{ results.breakdown.spouse_total }}</td>
+                                <td>40</td>
+                                <td>{{ "%.1f"|format((results.breakdown.spouse_total / 40) * 100) if results.breakdown.spouse_total else 0 }}%</td>
+                            </tr>
+                            <tr>
+                                <td>Skill Transferability</td>
+                                <td>{{ results.breakdown.skill_transfer }}</td>
+                                <td>100</td>
+                                <td>{{ "%.1f"|format((results.breakdown.skill_transfer / 100) * 100) }}%</td>
+                            </tr>
+                            <tr>
+                                <td>Additional Points</td>
+                                <td>{{ results.breakdown.additional_total }}</td>
+                                <td>895</td>
+                                <td>{{ "%.1f"|format((results.breakdown.additional_total / 895) * 100) }}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Detailed Breakdown -->
+                <h4 class="mb-3">Detailed Breakdown</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Factor</th>
+                                <th>Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Age</td>
+                                <td>{{ results.breakdown.age }}</td>
+                            </tr>
+                            <tr>
+                                <td>Education</td>
+                                <td>{{ results.breakdown.education }}</td>
+                            </tr>
+                            <tr>
+                                <td>First Official Language</td>
+                                <td>{{ results.breakdown.language }}</td>
+                            </tr>
+                            <tr>
+                                <td>Second Official Language</td>
+                                <td>{{ results.breakdown.second_language }}</td>
+                            </tr>
+                            <tr>
+                                <td>Canadian Work Experience</td>
+                                <td>{{ results.breakdown.canadian_work }}</td>
+                            </tr>
+                            <tr>
+                                <td>Foreign Work Experience</td>
+                                <td>{{ results.breakdown.foreign_work }}</td>
+                            </tr>
+                            <tr>
+                                <td>Canadian Education</td>
+                                <td>{{ results.breakdown.additional.canadian_education }}</td>
+                            </tr>
+                            <tr>
+                                <td>Sibling in Canada</td>
+                                <td>{{ results.breakdown.additional.sibling }}</td>
+                            </tr>
+                            <tr>
+                                <td>French Language Skills</td>
+                                <td>{{ results.breakdown.additional.french }}</td>
+                            </tr>
+                            <tr>
+                                <td>Job Offer</td>
+                                <td>{{ results.breakdown.additional.job_offer }}</td>
+                            </tr>
+                            <tr>
+                                <td>Provincial Nomination</td>
+                                <td>{{ results.breakdown.additional.provincial_nomination }}</td>
+                            </tr>
+                            {% if results.form_data.status == 'spouse' and results.form_data.spouse_accompanying %}
+                            <tr>
+                                <td>Spouse Education</td>
+                                <td>{{ results.breakdown.spouse.education }}</td>
+                            </tr>
+                            <tr>
+                                <td>Spouse Language</td>
+                                <td>{{ results.breakdown.spouse.language }}</td>
+                            </tr>
+                            <tr>
+                                <td>Spouse Work Experience</td>
+                                <td>{{ results.breakdown.spouse.work }}</td>
+                            </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Suggestions -->
+                <h4 class="mb-3">Personalized Improvement Suggestions</h4>
+                <div class="card">
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for suggestion in results.suggestions %}
+                            <li class="list-group-item">{{ suggestion }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Recalculate Button -->
+                <div class="mt-4 text-center">
+                    <a href="{{ url_for('index') }}" class="btn btn-primary">Recalculate</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

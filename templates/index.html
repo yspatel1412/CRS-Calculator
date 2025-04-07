@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <h2 class="text-center mb-4 pt-4 mt-2 ">Comprehensive Ranking System (CRS) Calculator</h2>
+        
+        <form id="crsForm" method="POST" action="{{ url_for('calculate') }}">
+            <!-- Personal Information Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>1. Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Marital Status</label>
+                        <div class="col-sm-8">
+                            <select class="form-select" name="status" id="maritalStatus" required>
+                                <option value="single">Single</option>
+                                <option value="spouse">Married/Common-law</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Age</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="age" min="17" max="100" required>
+                        </div>
+                    </div>
+                    
+                    <div id="spouseSection" style="display: none;">
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Spouse Accompanying?</label>
+                            <div class="col-sm-8">
+                                <select class="form-select" name="spouse_accompanying">
+                                    <option value="true">Yes</option>
+                                    <option value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Education Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>2. Education</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Highest Education Level</label>
+                        <div class="col-sm-8">
+                            <select class="form-select" name="education_level" required>
+                                <option value="1">Less than secondary school</option>
+                                <option value="2">Secondary school (high school graduation)</option>
+                                <option value="3">One-year program</option>
+                                <option value="4">Two-year program</option>
+                                <option value="5" selected>Bachelor's degree or 3+ year program</option>
+                                <option value="6">Two or more diplomas/degrees (one 3+ years)</option>
+                                <option value="7">Master's degree or professional degree</option>
+                                <option value="8">Doctoral (PhD)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Canadian Educational Credential?</label>
+                        <div class="col-sm-8">
+                            <select class="form-select" name="canadian_education">
+                                <option value="0">No</option>
+                                <option value="1">Secondary (high) school diploma or less</option>
+                                <option value="2">One or two year post secondary credential</option>
+                                <option value="3">Bachelor's (min. three years), Master's, Professional or PhD</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Language Proficiency Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>3. Language Proficiency</h5>
+                </div>
+                <div class="card-body">
+                    <h6>First Official Language (English or French)</h6>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Speaking CLB Level</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="first_lang_speaking" min="1" max="12" value="9" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Listening CLB Level</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="first_lang_listening" min="1" max="12" value="9" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Reading CLB Level</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="first_lang_reading" min="1" max="12" value="9" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Writing CLB Level</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="first_lang_writing" min="1" max="12" value="9" required>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Second Official Language Test Taken?</label>
+                        <div class="col-sm-8">
+                            <select class="form-select" id="secondLangToggle" name="secondLangToggle" required>
+                                <option value="no" selected>No</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="secondLangSection" style="display: none;">
+                        <h6>Second Official Language</h6>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Speaking CLB Level</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" name="second_lang_speaking" min="1" max="12" value="0" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Listening CLB Level</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" name="second_lang_listening" min="1" max="12" value="0" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Reading CLB Level</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" name="second_lang_reading" min="1" max="12" value="0" disabled>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Writing CLB Level</label>
+                            <div class="col-sm-8">
+                                <input type="number" class="form-control" name="second_lang_writing" min="1" max="12" value="0" disabled>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <!-- Work Experience Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>4. Work Experience</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Canadian Work Experience (years)</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="canadian_work_experience" min="0" max="10" value="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Foreign Work Experience (years)</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="foreign_work_experience" min="0" max="10" value="0" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Additional Points Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>5. Additional Points</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Sibling in Canada (citizen/PR)?</label>
+                        <div class="col-sm-8">
+                            <select class="form-select" name="has_sibling_in_canada">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Valid Job Offer?</label>
+                        <div class="col-sm-8">
+                            <select class="form-select" name="has_job_offer">
+                                <option value="0">No</option>
+                                <option value="1">Yes, NOC Skill Type 00</option>
+                                <option value="2">Yes, NOC Skill Type/Level 0, A, or B</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Provincial Nomination?</label>
+                        <div class="col-sm-8">
+                            <select class="form-select" name="has_provincial_nomination">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Skill Transferability Section -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>6. Skill Transferability Factors</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-8 col-form-label">CLB 7+ in all skills and post-secondary education?</label>
+                        <div class="col-sm-4">
+                            <select class="form-select" name="clb7_and_post_secondary">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label class="col-sm-8 col-form-label">Post-secondary education and Canadian work experience?</label>
+                        <div class="col-sm-4">
+                            <select class="form-select" name="post_secondary_and_canadian_exp">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label class="col-sm-8 col-form-label">2+ years foreign work and Canadian work experience?</label>
+                        <div class="col-sm-4">
+                            <select class="form-select" name="foreign_and_canadian_exp">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label class="col-sm-8 col-form-label">Certificate of qualification in a trade occupation?</label>
+                        <div class="col-sm-4">
+                            <select class="form-select" name="trade_certificate">
+                                <option value="false">No</option>
+                                <option value="true">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Spouse Section (conditionally shown) -->
+            <div class="card mb-4" id="spouseQualifications" style="display: none;">
+                <div class="card-header bg-primary text-white">
+                    <h5>7. Spouse/Partner Qualifications</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Spouse Education Level</label>
+                        <div class="col-sm-8">
+                            <select class="form-select" name="spouse_education_level">
+                                <option value="1">Less than secondary school</option>
+                                <option value="2">Secondary school (high school graduation)</option>
+                                <option value="3">One-year program</option>
+                                <option value="4">Two-year program</option>
+                                <option value="5" selected>Bachelor's degree or 3+ year program</option>
+                                <option value="6">Two or more diplomas/degrees (one 3+ years)</option>
+                                <option value="7">Master's degree or professional degree</option>
+                                <option value="8">Doctoral (PhD)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Spouse Canadian Work Experience (years)</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="spouse_canadian_exp" min="0" max="10" value="0">
+                        </div>
+                    </div>
+                    
+                    <h6>Spouse Language Proficiency</h6>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Speaking CLB Level</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="spouse_lang_speaking" min="1" max="12" value="5">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Listening CLB Level</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="spouse_lang_listening" min="1" max="12" value="5">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Reading CLB Level</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="spouse_lang_reading" min="1" max="12" value="5">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Writing CLB Level</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" name="spouse_lang_writing" min="1" max="12" value="5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-lg">Calculate CRS Score</button><br>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

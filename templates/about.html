@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center pt-5 mt-3">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header" style="background-color: #2e7d32; color: white;">
+                <h3 class="mb-0">About the CRS Calculator</h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h4 style="color: #2e7d32;">What is the Comprehensive Ranking System (CRS)?</h4>
+                    <p class="lead">
+                        The Comprehensive Ranking System (CRS) is a points-based system used by Immigration, Refugees and Citizenship Canada (IRCC) 
+                        to assess and score your profile and rank it in the Express Entry pool.
+                    </p>
+                    <p>
+                        The CRS evaluates factors such as age, education, language skills, and work experience to determine eligibility for Canadian immigration.
+                    </p>
+                </div>
+
+                <div class="mb-4">
+                    <h4 style="color: #2e7d32;">How does this calculator work?</h4>
+                    <p>
+                        This calculator estimates your CRS score based on IRCC's criteria, including:
+                    </p>
+                    <ul class="list-group list-group-flush mb-3">
+                        <li class="list-group-item">Core human capital factors (age, education, language skills, work experience)</li>
+                        <li class="list-group-item">Spouse or common-law partner factors (if applicable)</li>
+                        <li class="list-group-item">Skill transferability (education + work experience)</li>
+                        <li class="list-group-item">Additional points (job offers, provincial nominations, etc.)</li>
+                    </ul>
+                </div>
+
+                <div class="mb-4">
+                    <h4 style="color: #2e7d32;">Disclaimer</h4>
+                    <div class="alert alert-info">
+                        <p class="mb-0">
+                            This calculator provides an <strong>estimate only</strong>. Your actual CRS score may vary based on IRCC's official assessment. 
+                            This tool is for informational purposes and not legal advice.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('index') }}" class="btn btn-lg px-4" style="background-color: #2e7d32; color: white;">
+                        <i class="bi bi-calculator"></i> Try the Calculator
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
