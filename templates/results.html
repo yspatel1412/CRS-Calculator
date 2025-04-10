@@ -153,11 +153,47 @@
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
                             {% for suggestion in results.suggestions %}
-                            <li class="list-group-item">{{ suggestion }}</li>
+                                {% if not suggestion.startswith("Based on similar profiles") and not suggestion.startswith("- Profile with score") %}
+                                    <li class="list-group-item">{{ suggestion }}</li>
+                                {% endif %}
                             {% endfor %}
                         </ul>
                     </div>
                 </div>
+                
+            <!-- Similar Profiles Section -->
+            {% set shown_similar_profiles = false %}
+            {% for idx, suggestion in results.suggestions|enumerate(start=0) %}
+                {% if not shown_similar_profiles and suggestion.startswith("Based on similar profiles") %}
+                    <h4 class="mb-3 mt-4">Similar Profiles Analysis</h4>
+                    <div class="card">
+                        <div class="card-body">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">{{ suggestion }}</li>
+                                {% for i in range(1, 4) %}
+                                    {% set next_idx = idx + i %}
+                                    {% if next_idx < results.suggestions|length and results.suggestions[next_idx].startswith("- Profile with score") %}
+                                        <li class="list-group-item">{{ results.suggestions[next_idx] }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    {% set shown_similar_profiles = true %}
+                {% endif %}
+            {% endfor %}
+
+            
+                
+                <!-- Potential Score -->
+                {% for suggestion in results.suggestions %}
+                    {% if suggestion.startswith("By implementing these improvements") %}
+                        <div class="alert alert-info mt-4">
+                            <h5 class="alert-heading">Potential Score Improvement</h5>
+                            <p>{{ suggestion }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
                 
                 <!-- Recalculate Button -->
                 <div class="mt-4 text-center">

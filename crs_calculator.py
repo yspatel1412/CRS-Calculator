@@ -6,14 +6,23 @@ from collections import defaultdict
 import re
 
 class CRSAdvisor:
-    def __init__(self, synthetic_data_path=None):
-        if synthetic_data_path:
-            try:
-                self.data = pd.read_csv(synthetic_data_path)
-            except FileNotFoundError:
-                print(f"Warning: Could not find data file at {synthetic_data_path}")
-                self.data = None
-        else:
+    def __init__(self, synthetic_data_path='crs_synthetic_data.csv'):
+        try:
+            self.data = pd.read_csv(synthetic_data_path)
+            # Ensure all expected columns are present
+            required_columns = ['age', 'education_level', 'canadian_education', 
+                              'first_lang_speaking', 'first_lang_listening', 
+                              'first_lang_reading', 'first_lang_writing',
+                              'canadian_work_experience', 'foreign_work_experience',
+                              'spouse_accompanying', 'crs_score']
+            for col in required_columns:
+                if col not in self.data.columns:
+                    raise ValueError(f"Missing required column in synthetic data: {col}")
+        except FileNotFoundError:
+            print(f"Warning: Could not find data file at {synthetic_data_path}")
+            self.data = None
+        except Exception as e:
+            print(f"Warning: Error loading synthetic data: {str(e)}")
             self.data = None
         
         # Define maximum possible points for each category
@@ -494,10 +503,10 @@ class CRSAdvisor:
         marital_status = 'single' if user_data.get('status') == 'single' else 'with_spouse'
         breakdown = self.calculate_score_breakdown(user_data)
         impact_scores = self.calculate_impact_score(user_data)
-        
+
         # Sort impact scores to get top 3 most impactful areas
         top_impact_areas = sorted(impact_scores.items(), key=lambda x: x[1], reverse=True)[:3]
-        
+
         suggestions = []
         point_improvements = {}
         
@@ -594,14 +603,27 @@ class CRSAdvisor:
             
             suggestions.append(suggestion_text)
         
-        # Calculate potential future score
+        # Add similar profiles suggestions if synthetic data is available
+        if self.data is not None:
+                similar_suggestions = self._find_similar_profiles(user_data, breakdown['total'], n=3)
+                suggestions.extend(similar_suggestions[:4])  # 1 header + top 3 profiles
+
+        # Potential future score
         if point_improvements:
-            potential_score = breakdown['total'] + sum(point_improvements.values())
-            suggestions.append(f"\nBy implementing these improvements, your score could potentially reach: {min(potential_score, 1200)} points (Max CRS is 1200)")
+                potential_score = breakdown['total'] + sum(point_improvements.values())
+                suggestions.append(f"By implementing these improvements, your score could potentially reach: {min(potential_score, 1200)} points (Max CRS is 1200)")
+
+        # ✅ Add debug prints here
+        print("Suggestions generated:")
+        for s in suggestions:
+            print(s)
         
+       
         return suggestions
-    
-    def _find_similar_profiles(self, user_data, n=3):
+
+
+
+    def _find_similar_profiles(self, user_data, user_score, n=3):
         """Find similar profiles in synthetic data and their improvement strategies"""
         profile_text = self._create_profile_text(user_data)
         
@@ -615,11 +637,11 @@ class CRSAdvisor:
         # Get indices of most similar profiles
         similar_indices = similarities.argsort()[-n:][::-1]
         
-        suggestions = ["\nBased on similar profiles, consider these strategies:"]
+        suggestions = ["Based on similar profiles, consider these strategies:"]
         
         for idx in similar_indices:
             similar_score = self.data.iloc[idx]['crs_score']
-            strategy = self._generate_strategy_from_profile(self.data.iloc[idx], user_data['total_crs'])
+            strategy = self._generate_strategy_from_profile(self.data.iloc[idx], user_score)
             suggestions.append(f"- Profile with score {similar_score}: {strategy}")
         
         return suggestions

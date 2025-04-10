@@ -1,8 +1,14 @@
 from flask import Flask, render_template, request, jsonify
 from crs_calculator import CRSAdvisor
 import json
+import os
 
 app = Flask(__name__)
+
+# Ensure the synthetic data file exists
+SYNTHETIC_DATA_PATH = 'crs_synthetic_data.csv'
+if not os.path.exists(SYNTHETIC_DATA_PATH):
+    print("Synthetic data loaded:", self.data is not None, "Rows:", 0 if self.data is None else len(self.data))
 
 @app.route('/')
 def index():
@@ -11,6 +17,11 @@ def index():
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+@app.template_filter('enumerate')
+
+def _enumerate(iterable, start=0):
+    return enumerate(iterable, start=start)
 
 @app.route('/calculate', methods=['POST'])
 def calculate():
@@ -61,8 +72,8 @@ def calculate():
         else:
             form_data['spouse_accompanying'] = False
         
-        # Initialize advisor
-        advisor = CRSAdvisor()
+        # Initialize advisor with synthetic data
+        advisor = CRSAdvisor(SYNTHETIC_DATA_PATH)
         
         # Calculate score
         analysis = advisor.analyze_user_inputs(form_data)
